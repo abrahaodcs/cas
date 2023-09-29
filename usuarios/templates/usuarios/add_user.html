@@ -1,0 +1,53 @@
+{% extends "usuarios/base.html" %}
+
+{% block title %}Adicionar Usuário{% endblock %}
+
+{% block content %}
+<div class="add-user-container">
+    <h2>Adicionar Usuário</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="cpf">CPF:</label>
+        <input type="text" name="cpf" required>
+        <br>
+
+        <label for="password">Senha:</label>
+        <input type="password" name="password" required>
+        <br>
+
+        <label for="senha_provisoria">Senha Provisória:</label>
+        <input type="password" name="senha_provisoria">
+        <br>
+
+        <label for="cargo">Cargo:</label>
+        <input type="text" name="cargo">
+        <br>
+
+        <label for="nivel_acesso">Nível de Acesso:</label>
+        <input type="text" name="nivel_acesso">
+        <br>
+
+        <label for="nivel_organizacional">Nível Organizacional:</label>
+        <input type="text" name="nivel_organizacional">
+        <br>
+
+        <label for="nome">Nome:</label>
+        <input type="text" name="nome">
+        <br>
+
+        <label for="data_nascimento">Data de Nascimento:</label>
+        <input type="date" name="data_nascimento">
+        <br>
+
+        <label for="data_ingresso">Data de Ingresso:</label>
+        <input type="date" name="data_ingresso">
+        <br>
+
+        <label for="celular">Celular:</label>
+        <input type="text" name="celular">
+        <br>
+
+        <input type="submit" value="Criar Usuário">
+    </form>
+</div>
+{% endblock %}
