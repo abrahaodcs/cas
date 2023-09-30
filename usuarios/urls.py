@@ -17,6 +17,9 @@ urlpatterns = [
     path('email_sent_notification/', views.email_sent_notification, name='email_sent_notification_page'),
     path('recuperar-senha/', views.password_recovery, name='password_recovery'),
 
+    # URL para a página de editar/excluir usuários
+    path('edit_delete_users/', views.edit_delete_users, name='edit_delete_users'),
+
     # Password Reset URLs provided by Django's auth_views
     path('accounts/', include('allauth.urls')),
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),

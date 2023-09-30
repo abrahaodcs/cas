@@ -80,6 +80,9 @@ def add_user(request):
 
     return render(request, 'usuarios/add_user.html')
 
+def edit_delete_users(request):
+    users = CustomUser.objects.all()
+    return render(request, 'usuarios/edit_delete_users.html', {'users': users})
 
 def home(request):
     if not request.user.is_authenticated:

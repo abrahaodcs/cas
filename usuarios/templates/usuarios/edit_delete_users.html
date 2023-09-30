@@ -1,0 +1,22 @@
+<table>
+    <thead>
+        <tr>
+            <th>CPF</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Editar</th>
+            <th>Excluir</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.cpf }}</td>
+            <td>{{ user.nome }}</td>
+            <td>{{ user.email }}</td>
+            <td><a href="{% url 'edit_user' user.cpf %}">Editar</a></td>
+            <td><a href="{% url 'delete_user' user.cpf %}">Excluir</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

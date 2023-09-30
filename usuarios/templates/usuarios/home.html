@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Bem-vindo(a), {{ request.user.Nome }}!</h1>
+<h1>Bem-vindo(a), {{ request.user.nome }}!</h1>
 <p>Este é o seu painel.</p>
+
+<!-- Adicionando os novos links -->
+<hr> <!-- Uma linha horizontal para separar o conteúdo -->
+<h2>Administração de Usuários</h2>
+<p>
+    <a href="{% url 'add_user' %}">Adicionar Usuário</a>
+    <br>
+    <a href="{% url 'edit_delete_users' %}">Editar/Excluir Usuários</a>
+</p>
 {% endblock %}
