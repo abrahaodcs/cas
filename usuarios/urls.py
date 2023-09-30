@@ -19,6 +19,8 @@ urlpatterns = [
 
     # URL para a página de editar/excluir usuários
     path('edit_delete_users/', views.edit_delete_users, name='edit_delete_users'),
+    path('edit_user/<str:cpf>/', views.edit_user, name='edit_user'),
+    path('delete_user/<str:cpf>/', views.delete_user, name='delete_user'), # Adicionando a URL para excluir um usuário
 
     # Password Reset URLs provided by Django's auth_views
     path('accounts/', include('allauth.urls')),

@@ -1,0 +1,15 @@
+{% extends "usuarios/base.html" %}
+
+{% block title %}Editar Usuário{% endblock %}
+
+{% block content %}
+<div class="edit-user-container">
+    <h2>Editar Usuário: {{ user.nome }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Salvar Alterações">
+    </form>
+    <a href="{% url 'edit_delete_users' %}">Voltar para lista de usuários</a>
+</div>
+{% endblock %}

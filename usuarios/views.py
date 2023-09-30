@@ -9,7 +9,9 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from datetime import timedelta
 from django.utils import timezone
-
+from django.db.models import Q
+from django.http import HttpResponse
+from .forms import EditUserForm
 
 def send_temporary_password_email(email, password):
     send_mail(
@@ -81,8 +83,61 @@ def add_user(request):
     return render(request, 'usuarios/add_user.html')
 
 def edit_delete_users(request):
-    users = CustomUser.objects.all()
-    return render(request, 'usuarios/edit_delete_users.html', {'users': users})
+    users = CustomUser.objects.all()  # Por padrão, mostramos todos os usuários
+    selected_user = None  # Nenhum usuário selecionado por padrão
+
+    # Verifica se um termo de busca foi fornecido
+    search_term = request.GET.get('search', '')
+    if search_term:
+        # Filtra os usuários pelo termo de busca (nome ou CPF)
+        users = users.filter(
+            Q(cpf__icontains=search_term) | Q(nome__icontains=search_term)
+        )
+
+    # Verifica se um usuário foi selecionado para edição
+    selected_cpf = request.GET.get('edit_cpf', None)
+    if selected_cpf:
+        try:
+            selected_user = CustomUser.objects.get(cpf=selected_cpf)
+        except CustomUser.DoesNotExist:
+            # Aqui você pode manipular o erro conforme necessário, talvez redirecionar ou mostrar uma mensagem de erro
+            pass
+
+    return render(request, 'usuarios/edit_delete_users.html', {
+        'users': users,
+        'selected_user': selected_user,
+    })
+
+def edit_user(request, cpf):
+    try:
+        user = CustomUser.objects.get(cpf=cpf)
+    except CustomUser.DoesNotExist:
+        return HttpResponse("Usuário não encontrado", status=404)
+
+    if request.method == "POST":
+        form = EditUserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            # Você pode redirecionar para a página que quiser após a edição bem-sucedida
+            return redirect('edit_delete_users')
+    else:
+        form = EditUserForm(instance=user)
+
+    return render(request, 'usuarios/edit_user.html', {
+        'form': form,
+        'user': user,
+    })
+
+@user_passes_test(admin_check, login_url='user_login')
+def delete_user(request, cpf):
+    user = get_object_or_404(CustomUser, cpf=cpf)
+
+    if request.method == "POST":
+        user.delete()
+        return redirect('edit_delete_users')  # redireciona de volta para a lista de usuários
+
+    return render(request, 'usuarios/confirm_delete.html', {'user': user})
+
 
 def home(request):
     if not request.user.is_authenticated:

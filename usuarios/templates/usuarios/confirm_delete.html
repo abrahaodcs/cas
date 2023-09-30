@@ -1,0 +1,16 @@
+{% extends "usuarios/base.html" %}
+
+{% block title %}Excluir Usuário{% endblock %}
+
+{% block content %}
+<div class="delete-user-container">
+    <h2>Tem certeza de que deseja excluir o usuário {{ user.nome }}?</h2>
+    <p>Esta ação não pode ser desfeita.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Confirmar Exclusão">
+    </form>
+    <a href="{% url 'edit_delete_users' %}">Cancelar e voltar para lista de usuários</a>
+</div>
+{% endblock %}
