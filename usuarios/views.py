@@ -12,6 +12,7 @@ from django.utils import timezone
 from django.db.models import Q
 from django.http import HttpResponse
 from .forms import EditUserForm
+from django.contrib.auth.decorators import user_passes_test
 
 def send_temporary_password_email(email, password):
     send_mail(
