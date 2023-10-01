@@ -14,6 +14,9 @@ from django.http import HttpResponse
 from .forms import EditUserForm
 from django.contrib.auth.decorators import user_passes_test
 
+def admin_check(user):
+    return user.nivel_acesso == "Administrador"
+
 def send_temporary_password_email(email, password):
     send_mail(
         'Sua senha provisória',
@@ -23,13 +26,11 @@ def send_temporary_password_email(email, password):
         fail_silently=False,
     )
 
-
 def email_sent_notification(request):
     context = {
         'message': 'Um e-mail com sua senha provisória foi enviado. Por favor, verifique sua caixa de entrada.'
     }
     return render(request, 'usuarios/email_sent_notification.html', context)
-
 
 def user_login(request):
     if request.method == "POST":
@@ -139,12 +140,10 @@ def delete_user(request, cpf):
 
     return render(request, 'usuarios/confirm_delete.html', {'user': user})
 
-
 def home(request):
     if not request.user.is_authenticated:
         return redirect('user_login')
     return render(request, 'usuarios/home.html')
-
 
 def password_recovery(request):
     if request.method == "POST":
@@ -158,12 +157,10 @@ def password_recovery(request):
 
     return render(request, 'usuarios/password_recovery.html')
 
-
 @login_required
 def user_logout(request):
     logout(request)
     return redirect('user_login')
-
 
 @login_required
 def change_password(request):
