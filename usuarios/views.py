@@ -67,7 +67,7 @@ def send_new_temp_password(user):
 def add_user(request):
     if request.method == "POST":
         data = {
-            'CPF': request.POST.get("cpf"),
+            'cpf': request.POST.get("cpf"),  # Mude 'CPF' para 'cpf'
             'password': request.POST.get("password"),
             'senha_provisoria': make_password(request.POST.get("senha_provisoria")),
             'cargo': request.POST.get("cargo"),
