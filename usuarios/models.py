@@ -21,6 +21,8 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('O CPF é obrigatório.')
 
         user = self.model(cpf=cpf, **extra_fields)
+
+        user = self.model(cpf=cpf, **extra_fields)
         user.set_password(password)
         user.initialize_temporary_password()
 

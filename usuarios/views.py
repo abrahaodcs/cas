@@ -34,9 +34,8 @@ def email_sent_notification(request):
 
 def user_login(request):
     if request.method == "POST":
-        cpf = request.POST.get('CPF')
+        cpf = request.POST.get('cpf')  # Ajustado para 'cpf'
         password = request.POST.get('password')
-
         user = get_object_or_404(CustomUser, cpf=cpf)
 
         if user.check_password(password):
@@ -67,7 +66,7 @@ def send_new_temp_password(user):
 def add_user(request):
     if request.method == "POST":
         data = {
-            'cpf': request.POST.get("cpf"),  # Mude 'CPF' para 'cpf'
+            'cpf': request.POST.get("cpf"),
             'password': request.POST.get("password"),
             'senha_provisoria': make_password(request.POST.get("senha_provisoria")),
             'cargo': request.POST.get("cargo"),
@@ -79,7 +78,11 @@ def add_user(request):
             'celular': request.POST.get("celular")
         }
 
-        CustomUser.objects.create(**data)
+        user = CustomUser.objects.create(**data)
+
+        # Enviar senha provisória por email
+        send_temporary_password_email(user.email, user.senha_provisoria)
+
         return redirect('home')
 
     return render(request, 'usuarios/add_user.html')
@@ -147,8 +150,8 @@ def home(request):
 
 def password_recovery(request):
     if request.method == "POST":
-        cpf = request.POST.get('CPF')
-        user = get_object_or_404(CustomUser, CPF=cpf)
+        cpf = request.POST.get('cpf')
+        user = get_object_or_404(CustomUser, cpf=cpf)
 
         send_new_temp_password(user)
 
