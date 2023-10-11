@@ -1,5 +1,3 @@
-#usuarios/models.py
-
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 import secrets
@@ -19,8 +17,6 @@ class CustomUserManager(BaseUserManager):
     def create_user(self, cpf, password=None, **extra_fields):
         if not cpf:
             raise ValueError('O CPF é obrigatório.')
-
-        user = self.model(cpf=cpf, **extra_fields)
 
         user = self.model(cpf=cpf, **extra_fields)
         user.set_password(password)
@@ -55,6 +51,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     celular = models.CharField(max_length=15, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_first_login = models.BooleanField(default=True)
 
     objects = CustomUserManager()
 
@@ -66,6 +63,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             temp_password = generate_random_password()
             self.senha_provisoria = make_password(temp_password)
             self.senha_provisoria_data = timezone.now()
+            self.is_first_login = True
+
+    def is_first_login_user(self):
+        return self.is_first_login
+
+    def set_first_login_done(self):
+        self.is_first_login = False
+        self.save()
 
     def is_temporary_password_valid(self):
         if self.senha_provisoria_data:
