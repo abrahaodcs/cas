@@ -20,7 +20,7 @@ SECRET_KEY = 'django-insecure-fte@c2(&6y21zh5qgn3+ovh=)t0$kf&@63)wh=a(85e9z0=cx_
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['149.100.154.26', 'cas-gss.com.br']
+ALLOWED_HOSTS = ['149.100.154.26', 'cas-gss.com.br', '127.0.0.1']
 
 
 # Application definition
@@ -84,7 +84,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -137,3 +136,11 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+# Configurações de email usando Gmail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'cas@gruposkinsoft.com'
+EMAIL_HOST_PASSWORD = 'eosi wxgm hhky axlk'

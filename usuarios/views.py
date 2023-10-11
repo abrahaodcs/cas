@@ -65,10 +65,17 @@ def send_new_temp_password(user):
 
 def add_user(request):
     if request.method == "POST":
+        # 1. Gere uma senha provisória
+        temp_password = generate_random_password()
+
+        # 2. Faça hash dessa senha
+        hashed_temp_password = make_password(temp_password)
+
         data = {
             'cpf': request.POST.get("cpf"),
-            'password': request.POST.get("password"),
-            'senha_provisoria': make_password(request.POST.get("senha_provisoria")),
+            'email': request.POST.get("email"),  # Adicione esta linha
+            'password': hashed_temp_password,
+            'senha_provisoria': hashed_temp_password,
             'cargo': request.POST.get("cargo"),
             'nivel_acesso': request.POST.get("nivel_acesso"),
             'nivel_organizacional': request.POST.get("nivel_organizacional"),
@@ -78,10 +85,15 @@ def add_user(request):
             'celular': request.POST.get("celular")
         }
 
+        # Validação de integridade do email
+        if not data['email'] or CustomUser.objects.filter(email=data['email']).exists():
+            messages.error(request, "Email é obrigatório ou já está registrado.")
+            return render(request, 'usuarios/add_user.html')  # Redirecionar de volta para a página de adição com uma mensagem de erro
+
         user = CustomUser.objects.create(**data)
 
         # Enviar senha provisória por email
-        send_temporary_password_email(user.email, user.senha_provisoria)
+        send_temporary_password_email(user.email, temp_password)
 
         return redirect('home')
 
